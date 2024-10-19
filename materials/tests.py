@@ -63,8 +63,18 @@ class LessonTestCase(APITestCase):
         url = reverse('materials:lessons_list')
         response = self.client.get(url)
         data = response.json()
+        created_text = str(self.course.created_at)
+        created = created_text[0:10]+'T'+created_text[11:26]+'Z'
+        updated_text = str(self.course.updated_at)
+        updated = updated_text[0:10] + 'T' + updated_text[11:26] + 'Z'
+        self.maxDiff = None
         result = {'count': 1, 'next': None, 'previous': None, 'results': [
-            {'id': self.lesson.pk, 'name': self.lesson.name, 'image': None, 'description': self.lesson.description,
-             'url': None, 'course': self.course.pk, 'owner': self.user.pk}]}
+            {'id': self.lesson.pk, 'name': self.lesson.name, 'description': self.lesson.description, 'image': None,
+             'url': None, 'amount': None, 'owner': self.user.pk, 'course': self.course.pk}]}
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(data, result)
+
+        # result = {'count': 1, 'next': None, 'previous': None, 'results': [
+        #     {'id': 4, 'name': 'LessonTest1', 'description': 'LessonTest1 description', 'image': None, 'url': None,
+        #      'amount': None, 'created_at': '2024-10-19T22:23:43.179834+03:00',
+        #      'updated_at': '2024-10-19T22:23:43.179837+03:00', 'owner': 3, 'course': 3}]}
